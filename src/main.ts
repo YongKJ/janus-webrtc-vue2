@@ -3,6 +3,31 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+// @ts-ignore
+import HappyScroll from "vue-happy-scroll";
+import "vue-happy-scroll/docs/happy-scroll.css";
+
+Vue.use(HappyScroll);
+
+// @ts-ignore
+import Particles from "vue2-particles";
+
+Vue.use(Particles);
+
+router.beforeEach((to, from, next) => {
+    switch (to.path) {
+        case "/test":
+            document.title = (<Record<string, any>>to.meta).title;
+            next();
+            break;
+        case "/":
+            next();
+            break;
+        default:
+            next({path: "/"});
+    }
+});
+
 Vue.config.productionTip = false
 
 new Vue({

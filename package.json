@@ -7,9 +7,16 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@types/lodash-es": "^4.17.7",
+    "autobind-decorator": "^2.4.0",
     "core-js": "^3.8.3",
+    "eventemitter2": "^6.4.9",
+    "lodash-es": "^4.17.21",
+    "tsparticles": "^2.9.3",
     "vue": "^2.6.14",
+    "vue-happy-scroll": "^2.1.1",
     "vue-router": "^3.5.1",
+    "vue2-particles": "^2.9.3",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
