@@ -26,4 +26,6 @@ export interface BaseService<U> {
 
     getRef(name: string): any;
 
+    toTest(): void;
+
 }

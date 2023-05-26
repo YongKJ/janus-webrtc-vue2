@@ -10,6 +10,7 @@
     "@types/lodash-es": "^4.17.7",
     "autobind-decorator": "^2.4.0",
     "core-js": "^3.8.3",
+    "element-ui": "^2.15.13",
     "eventemitter2": "^6.4.9",
     "lodash-es": "^4.17.21",
     "tsparticles": "^2.9.3",

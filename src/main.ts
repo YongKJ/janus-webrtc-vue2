@@ -14,6 +14,11 @@ import Particles from "vue2-particles";
 
 Vue.use(Particles);
 
+import "element-ui/lib/theme-chalk/index.css";
+import {ElementUI} from "@/common/config/ElementUI";
+
+Vue.use(ElementUI);
+
 router.beforeEach((to, from, next) => {
     switch (to.path) {
         case "/test":
@@ -31,7 +36,7 @@ router.beforeEach((to, from, next) => {
 Vue.config.productionTip = false
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

@@ -46,6 +46,10 @@ export abstract class CommonService<U> extends EventEmitter2 implements BaseServ
         return (<Record<string, any>>vue)[serviceName];
     }
 
+    public toTest() {
+        this.toRouter("/test");
+    }
+
     protected toRouter(path: string, query?: Record<string, any>): void {
         let uid = GenUtil.getUrlKey("uid");
         if (typeof uid !== "undefined" && uid.length > 0) {
