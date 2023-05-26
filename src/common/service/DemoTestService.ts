@@ -18,6 +18,10 @@ export class DemoTestService extends CommonService<DemoTestService> {
     }
 
     public initData(): void {
+        this.getService(WallpaperPlusService).on("test", msg => {
+            Message.info(msg);
+            LogUtil.loggerLine(Log.of("DemoTestService", "testEvent", "msg", msg));
+        });
         // LogUtil.loggerLine(Log.of("DemoTestService", "initData", "message", this.vue.$message));
         LogUtil.loggerLine(Log.of("DemoTestService", "initData", "vue", this.vue));
         LogUtil.loggerLine(Log.of("DemoTestService", "initData", "WallpaperPlusService", this.getService(WallpaperPlusService)));
@@ -32,7 +36,7 @@ export class DemoTestService extends CommonService<DemoTestService> {
     }
 
     public login(): void {
-        Message.info("测试");
+
     }
 
     public connect(): void {
@@ -44,7 +48,7 @@ export class DemoTestService extends CommonService<DemoTestService> {
     }
 
     public handleButtonClick(): void {
-        Message.info("测试");
+        this.getService(WallpaperPlusService).emit("test", "Hello world！")
     }
 
     get userName(): string {
