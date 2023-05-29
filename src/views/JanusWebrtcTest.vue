@@ -20,7 +20,7 @@
     </el-row>
 
     <el-form class="login-container" label-position="left" label-width="0px">
-      <h3 class="login_title">WebRTC 测试</h3>
+      <h3 class="login_title">Janus 测试</h3>
 
       <el-form-item style="user-select: none;">
         <el-input
