@@ -21,6 +21,7 @@ Vue.use(ElementUI);
 
 router.beforeEach((to, from, next) => {
     switch (to.path) {
+        case "/stream":
         case "/webrtc":
         case "/janus":
         case "/audio":

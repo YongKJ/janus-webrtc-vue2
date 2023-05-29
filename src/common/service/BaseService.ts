@@ -48,6 +48,8 @@ export interface BaseService<U> {
 
     toWebrtc(): void;
 
+    toStream(): void;
+
     toAudio(): void;
 
     toJanus(): void;

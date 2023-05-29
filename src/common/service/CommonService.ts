@@ -75,6 +75,10 @@ export abstract class CommonService<U> extends EventEmitter2 implements BaseServ
         this.toRouter("/webrtc");
     }
 
+    public toStream(): void {
+        this.toRouter("/stream");
+    }
+
     public toAudio(): void {
         this.toRouter("/audio");
     }

@@ -43,6 +43,14 @@ const routes: Array<RouteConfig> = [
     },
     component: () => import(/* webpackChunkName: "about" */ '@/views/JanusWebrtcTest.vue')
   },
+  {
+    path: '/stream',
+    name: 'stream',
+    meta: {
+      title: 'Janus Stream Test'
+    },
+    component: () => import(/* webpackChunkName: "about" */ '@/views/JanusStreamTest.vue')
+  },
 ]
 
 const router = new VueRouter({

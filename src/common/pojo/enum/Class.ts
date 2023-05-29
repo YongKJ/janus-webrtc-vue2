@@ -6,5 +6,6 @@ export enum Class {
     JanusAudioTestService = "JanusAudioTestService",
     JanusWebrtcTestService = "JanusWebrtcTestService",
     WebrtcPeerTestService = "WebrtcPeerTestService",
+    JanusStreamTestService = "JanusStreamTestService",
 
 }
