@@ -4,7 +4,6 @@ import {Class} from "@/common/pojo/enum/Class";
 import {LogUtil} from "@/common/util/LogUtil";
 import {Log} from "@/common/pojo/dto/Log";
 import {WallpaperPlusService} from "@/common/service/WallpaperPlusService";
-import {Message} from "element-ui";
 
 export class DemoTestService extends CommonService<DemoTestService> {
 
@@ -19,7 +18,7 @@ export class DemoTestService extends CommonService<DemoTestService> {
 
     public initData(): void {
         this.getService(WallpaperPlusService).on("test", msg => {
-            Message.info(msg);
+            this.info(msg);
             LogUtil.loggerLine(Log.of("DemoTestService", "testEvent", "msg", msg));
         });
         // LogUtil.loggerLine(Log.of("DemoTestService", "initData", "message", this.vue.$message));
