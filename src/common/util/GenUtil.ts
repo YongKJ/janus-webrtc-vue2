@@ -12,7 +12,7 @@ export class GenUtil {
         if (typeof transceiver === "undefined") return;
         let stream = <StreamInfo>streams.find(stream => stream.rtcDirec === rtcDirec);
         stream.bitrate.value = "0 kbits/sec";
-        LogUtil.loggerLine(Log.of("JanusWebrtcTestService", "getBitrate", "transceiver", transceiver));
+        LogUtil.loggerLine(Log.of("GenUtil", "initBitrate", "transceiver", transceiver));
         if (stream.bitrate.timer) return;
         stream.bitrate.timer = setInterval(async () => {
             let stats = await transceiver.receiver.getStats();
@@ -31,7 +31,7 @@ export class GenUtil {
                     stream.bitrate.tsbefore = stream.bitrate.tsnow;
                 }
             });
-            LogUtil.loggerLine(Log.of("JanusWebrtcTestService", "getBitrate", "bitrate.value", stream.bitrate.value));
+            LogUtil.loggerLine(Log.of("GenUtil", "initBitrate", "bitrate.value", stream.bitrate.value));
         }, 1000);
     }
 
