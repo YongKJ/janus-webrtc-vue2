@@ -159,49 +159,11 @@ export class WebrtcPeerTestService extends CommonService<WebrtcPeerTestService> 
             let streamInfo = this._streams.find(info => info.rtcDirec === rtcDirec);
             if (typeof streamInfo !== "undefined") return;
             this._streams.push(StreamInfo.of(rtcDirec, stream));
-            await this.initBitrate(rtcDirec, peer?.getTransceiver());
+            await GenUtil.initBitrate(rtcDirec, this._streams, peer?.getTransceiver());
             GenUtil.timer(() => (<HTMLVideoElement>document.getElementById(rtcDirec)).srcObject = stream, 25);
         });
 
         await peer.stream(this._streams[0].stream);
-    }
-
-    public async initBitrate(rtcDirec: string, transceiver?: RTCRtpTransceiver): Promise<void> {
-        if (typeof transceiver === "undefined") return;
-        let stream = <StreamInfo>this.service.streams.find(stream => stream.rtcDirec === rtcDirec);
-        stream.bitrate.value = "0 kbits/sec";
-        LogUtil.loggerLine(Log.of("JanusWebrtcTestService", "getBitrate", "transceiver", transceiver));
-        if (stream.bitrate.timer) return;
-        stream.bitrate.timer = setInterval(async () => {
-            let stats = await transceiver.receiver.getStats();
-            stats.forEach((res: Record<string, any>) => {
-                if (!WebrtcPeerTestService.isIncomingMedia(res)) return;
-                stream.bitrate.bsnow = res.bytesReceived;
-                stream.bitrate.tsnow = res.timestamp;
-                if (stream.bitrate.bsbefore === null || stream.bitrate.tsbefore === null) {
-                    stream.bitrate.bsbefore = stream.bitrate.bsnow;
-                    stream.bitrate.tsbefore = stream.bitrate.tsnow;
-                } else {
-                    let timePassed = <number>stream.bitrate.tsnow - stream.bitrate.tsbefore;
-                    let bitRate = Math.round((<number>stream.bitrate.bsnow - stream.bitrate.bsbefore) * 8 / timePassed);
-                    stream.bitrate.value = bitRate + ' kbits/sec';
-                    stream.bitrate.bsbefore = stream.bitrate.bsnow;
-                    stream.bitrate.tsbefore = stream.bitrate.tsnow;
-                }
-            });
-            LogUtil.loggerLine(Log.of("JanusWebrtcTestService", "getBitrate", "bitrate.value", stream.bitrate.value));
-        }, 1000);
-    }
-
-    private static isIncomingMedia(res: Record<string, any>): boolean {
-        if ((res.mediaType === "video" || res.id.toLowerCase().indexOf("video") > -1) &&
-            res.type === "inbound-rtp" && res.id.indexOf("rtcp") < 0) {
-            return true;
-        } else if (res.type == 'ssrc' && res.bytesReceived &&
-            (res.googCodecName === "VP8" || res.googCodecName === "")) {
-            return true;
-        }
-        return false;
     }
 
     public disconnect(): void {
