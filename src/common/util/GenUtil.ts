@@ -1,3 +1,4 @@
+import {DataUtil} from "@/common/util/DataUtil";
 
 export class GenUtil {
 
@@ -6,6 +7,15 @@ export class GenUtil {
 
     public static sleep(waitTimeInMs: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, waitTimeInMs));
+    }
+
+    public static objToRecord<T>(obj: T): Record<string, any> {
+        let recData: Record<string, any> = {};
+        let methodNames = DataUtil.getPrototypes(obj);
+        for (let methodName of methodNames) {
+            recData[methodName] = obj[<keyof T>methodName];
+        }
+        return recData;
     }
 
     public static getUrlKey(key: string): string | undefined {
