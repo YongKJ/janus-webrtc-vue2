@@ -106,9 +106,9 @@ export class WebRTCPeer implements WebRTC {
     private static iceServer(): RTCConfiguration {
         return {
             iceServers: [{
-                urls: "",
-                credential: "",
-                username: "",
+                urls: "turn:coturn.yongkj.cn:5349",
+                credential: "*Dxj1003746818",
+                username: "yongkj",
             }]
         };
     }

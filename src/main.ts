@@ -21,6 +21,9 @@ Vue.use(ElementUI);
 
 router.beforeEach((to, from, next) => {
     switch (to.path) {
+        case "/webrtc":
+        case "/janus":
+        case "/audio":
         case "/test":
             document.title = (<Record<string, any>>to.meta).title;
             next();

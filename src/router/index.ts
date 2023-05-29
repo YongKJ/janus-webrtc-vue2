@@ -17,7 +17,32 @@ const routes: Array<RouteConfig> = [
       title: "DemoTest"
     },
     component: () => import(/* webpackChunkName: "about" */ '@/views/DemoTest.vue')
-  }
+  },
+
+  {
+    path: '/webrtc',
+    name: 'webrtc',
+    meta: {
+      title: 'Webrtc Peer Test'
+    },
+    component: () => import(/* webpackChunkName: "about" */ '@/views/WebrtcPeerTest.vue')
+  },
+  {
+    path: '/audio',
+    name: 'audio',
+    meta: {
+      title: 'Janus Audio Test'
+    },
+    component: () => import(/* webpackChunkName: "about" */ '@/views/JanusAudioTest.vue')
+  },
+  {
+    path: '/janus',
+    name: 'janus',
+    meta: {
+      title: 'Janus Webrtc Test'
+    },
+    component: () => import(/* webpackChunkName: "about" */ '@/views/JanusWebrtcTest.vue')
+  },
 ]
 
 const router = new VueRouter({

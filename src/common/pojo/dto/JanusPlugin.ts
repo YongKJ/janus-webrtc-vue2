@@ -1,5 +1,5 @@
-import {WebRTCPeer} from "@/views/online/common/module/webrtc/WebRTCPeer";
-import {JanusUtil} from "@/views/online/common/util/JanusUtil";
+import {WebRTCPeer} from "@/common/module/webrtc/WebRTCPeer";
+import {JanusUtil} from "@/common/util/JanusUtil";
 
 export class JanusPlugin {
 

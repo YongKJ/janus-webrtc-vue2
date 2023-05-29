@@ -4,6 +4,11 @@ import EventEmitter2 from "eventemitter2";
 import Vue from "vue";
 import {LogUtil} from "@/common/util/LogUtil";
 import {Log} from "@/common/pojo/dto/Log";
+import {PeerController} from "@/common/controller/PeerController";
+import {StreamingController} from "@/common/controller/StreamingController";
+import {VideoRoomController} from "@/common/controller/VideoRoomController";
+import {AudioBridgeController} from "@/common/controller/AudioBridgeController";
+import {Message} from "element-ui";
 
 export abstract class CommonService<U> extends EventEmitter2 implements BaseService<U> {
 
@@ -12,6 +17,10 @@ export abstract class CommonService<U> extends EventEmitter2 implements BaseServ
     private static readonly _emitter = new EventEmitter2();
     private static readonly mapVue = new Map<string, Vue>();
     private static readonly mapData = new Map<string, any>();
+    private static readonly _peerController = new PeerController();
+    private static readonly _videoRoomController = new VideoRoomController();
+    private static readonly _streamingController = new StreamingController();
+    private static readonly _audioBridgeController = new AudioBridgeController();
 
     protected constructor(vue: { proxy: Vue } | null) {
         super();
@@ -46,6 +55,34 @@ export abstract class CommonService<U> extends EventEmitter2 implements BaseServ
         return (<Record<string, any>>vue)[serviceName];
     }
 
+    public success(msg: string) {
+        Message.success(msg);
+    }
+
+    public warning(msg: string) {
+        Message.warning(msg);
+    }
+
+    public error(msg: string) {
+        Message.error(msg);
+    }
+
+    public info(msg: string) {
+        Message.info(msg);
+    }
+
+    public toWebrtc(): void {
+        this.toRouter("/webrtc");
+    }
+
+    public toAudio(): void {
+        this.toRouter("/audio");
+    }
+
+    public toJanus(): void {
+        this.toRouter("/janus");
+    }
+
     public toTest() {
         this.toRouter("/test");
     }
@@ -56,6 +93,22 @@ export abstract class CommonService<U> extends EventEmitter2 implements BaseServ
             typeof query === "undefined" ? query = {uid: uid} : query.uid = uid;
         }
         this.vue.$router.push(typeof query === "undefined" ? {path: path} : {path: path, query: query}).then();
+    }
+
+    get audioBridgeController(): AudioBridgeController {
+        return CommonService._audioBridgeController;
+    }
+
+    get videoRoomController(): VideoRoomController {
+        return CommonService._videoRoomController;
+    }
+
+    get streamingController(): StreamingController {
+        return CommonService._streamingController;
+    }
+
+    get peerController(): PeerController {
+        return CommonService._peerController;
     }
 
     get service(): U {

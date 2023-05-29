@@ -1,13 +1,13 @@
-import {JanusUtil} from "@/views/online/common/util/JanusUtil";
-import {Global} from "@/views/home/common/space/Global";
-import {PublisherData} from "@/views/online/common/pojo/dto/PublisherData";
-import {DataUtil} from "@/views/home/common/util/DataUtil";
-import {PublishData} from "@/views/online/common/pojo/dto/PublishData";
-import {SubscribeData} from "@/views/online/common/pojo/dto/SubscribeData";
-import {Publisher} from "@/views/online/common/pojo/dto/Publisher";
-import {Log} from "@/views/home/common/pojo/dto/Log";
-import {LogUtil} from "@/views/home/common/util/LogUtil";
-import {JanusPlugin} from "@/views/online/common/pojo/dto/JanusPlugin";
+import {JanusUtil} from "@/common/util/JanusUtil";
+import {JanusPlugin} from "@/common/pojo/dto/JanusPlugin";
+import {LogUtil} from "@/common/util/LogUtil";
+import {Log} from "@/common/pojo/dto/Log";
+import {Publisher} from "@/common/pojo/dto/Publisher";
+import {DataUtil} from "@/common/util/DataUtil";
+import {SubscribeData} from "@/common/pojo/dto/SubscribeData";
+import {PublishData} from "@/common/pojo/dto/PublishData";
+import {PublisherData} from "@/common/pojo/dto/PublisherData";
+import {Global} from "@/common/config/Global";
 
 export class VideoRoomService {
 

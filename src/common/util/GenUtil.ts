@@ -5,6 +5,10 @@ export class GenUtil {
     private constructor() {
     }
 
+    public static timer(func: () => void, time: number): void {
+        setTimeout(func, time);
+    }
+
     public static sleep(waitTimeInMs: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, waitTimeInMs));
     }
