@@ -18,7 +18,6 @@ const routes: Array<RouteConfig> = [
     },
     component: () => import(/* webpackChunkName: "about" */ '@/views/DemoTest.vue')
   },
-
   {
     path: '/webrtc',
     name: 'webrtc',

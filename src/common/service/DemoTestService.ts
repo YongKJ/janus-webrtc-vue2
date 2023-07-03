@@ -47,7 +47,11 @@ export class DemoTestService extends CommonService<DemoTestService> {
     }
 
     public handleButtonClick(): void {
-        this.getService(WallpaperPlusService).emit("test", "Hello world！")
+        this._userName = "Hello world!";
+        this._password = "Hello world!";
+        // this.service.userName = "Hello world!";
+        // this.service.password = "Hello world!";
+        this.getService(WallpaperPlusService).emit("test", "Hello world！");
     }
 
     get userName(): string {
