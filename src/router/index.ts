@@ -7,7 +7,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     redirect: {
-      name: "test"
+      name: "visual"
     }
   },
   {
@@ -49,6 +49,14 @@ const routes: Array<RouteConfig> = [
       title: 'Janus Stream Test'
     },
     component: () => import(/* webpackChunkName: "about" */ '@/views/JanusStreamTest.vue')
+  },
+  {
+    path: '/visual',
+    name: 'visual',
+    meta: {
+      title: 'Visualized Analysis Test'
+    },
+    component: () => import(/* webpackChunkName: "about" */ '@/views/VisualizedAnalysis.vue')
   },
 ]
 

@@ -9,6 +9,22 @@
     <el-form class="login-container" label-position="left" label-width="0px">
       <h3 class="login_title">袖珍网盘吧</h3>
       <el-form-item style="user-select: none;">
+        <el-upload
+            drag
+            multiple
+            ref="upload"
+            :auto-upload="false"
+            :action="demoTestService.url"
+            :file-list="demoTestService.files"
+            :on-change="demoTestService.changeFiles"
+            :http-request="demoTestService.uploadFiles"
+        >
+          <i class="el-icon-upload avatar-uploader-icon-computer"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        </el-upload>
+      </el-form-item>
+
+      <el-form-item style="user-select: none;">
         <el-input type="text" v-model="demoTestService.userName" placeholder="请输入邮箱地址或用户名..."></el-input>
       </el-form-item>
 
@@ -63,6 +79,18 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+/deep/ .el-upload-list__item-name:hover {
+  color: #606266;
+}
+
+/deep/ .el-upload-list__item-name {
+  color: white;
+}
+
+/deep/ .el-upload-dragger {
+  width: 330px;
+}
+
 .button {
   width: 100px;
   height: 20px;
