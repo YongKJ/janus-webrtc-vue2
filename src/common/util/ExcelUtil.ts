@@ -55,8 +55,7 @@ export class ExcelUtil {
                     <any>new ReadableWebToNodeStream(excel.stream())
                 );
             } else {
-                let buffer = await this.getBuffer(excel);
-                let workbook = await new Workbook().xlsx.load(buffer);
+                let workbook = await new Workbook().xlsx.load(await excel.arrayBuffer());
                 if (typeof sheetName === "number") sheetName += 1;
                 return workbook.getWorksheet(sheetName);
             }
@@ -64,7 +63,7 @@ export class ExcelUtil {
     }
 
     private static async getSheetBySheetjs(excel: string | File, sheetName: string | number): Promise<WorkSheet> {
-        let workbook = typeof excel === "string" ? XLSX.readFile(excel) : XLSX.read(await this.getBuffer(excel));
+        let workbook = typeof excel === "string" ? XLSX.readFile(excel) : XLSX.read(await excel.arrayBuffer());
         sheetName = typeof sheetName === "number" ? workbook.SheetNames[sheetName] : sheetName;
         return workbook.Sheets[sheetName];
     }
