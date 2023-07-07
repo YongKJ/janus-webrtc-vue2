@@ -510,7 +510,9 @@ export class ExcelUtil {
 
     //导出excel文件
     public static async writeBuffer(): Promise<Buffer> {
-        let buffer = await this.workbook?.xlsx.writeBuffer();
+        let buffer = await this.workbook?.xlsx.writeBuffer({
+            zip: {compressionOptions: {level: 9}}
+        });
         this.workbook = null;
         return <Buffer>buffer;
     }
