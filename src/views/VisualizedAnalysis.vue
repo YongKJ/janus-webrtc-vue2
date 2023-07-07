@@ -17,7 +17,7 @@
         >
           <i class="el-icon-upload avatar-uploader-icon-computer"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击选择</em></div>
-          <div class="upload-tips">数据文件格式支持 XLSX、CSV</div>
+          <div class="upload-tips">数据文件格式支持 XLSX、XLS、CSV</div>
         </el-upload>
       </el-form-item>
 

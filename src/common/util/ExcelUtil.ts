@@ -3,6 +3,8 @@ import {ReadableWebToNodeStream} from "readable-web-to-node-stream";
 import {FileUtil} from "@/common/util/FileUtil";
 import {Coords} from "../pojo/po/Coords";
 import {GenUtil} from "@/common/util/GenUtil";
+import * as XLSX from "xlsx";
+import {WorkSheet} from "xlsx";
 
 export class ExcelUtil {
 
@@ -30,7 +32,15 @@ export class ExcelUtil {
     //移动方向：上、右、下、左
     private static readonly MOVE: Array<Array<number>> = [[0, 1], [1, 0], [0, -1], [-1, 0]];
 
-    private static async getSheet(excel: string | File, sheetName: string | number): Promise<Worksheet> {
+    private static async getBuffer(excel: File): Promise<ArrayBuffer> {
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(excel);
+        return new Promise<ArrayBuffer>(resolve => {
+            reader.onload = e => resolve(<Buffer>e.target?.result);
+        });
+    }
+
+    private static async getSheetByExceljs(excel: string | File, sheetName: string | number): Promise<Worksheet> {
         if (typeof excel === "string") {
             if (excel.endsWith(".csv")) {
                 return await new Workbook().csv.readFile(excel);
@@ -53,25 +63,32 @@ export class ExcelUtil {
         }
     }
 
-    private static async getBuffer(excel: File): Promise<ArrayBuffer> {
-        const reader = new FileReader();
-        reader.readAsArrayBuffer(excel);
-        return new Promise<ArrayBuffer>(resolve => {
-            reader.onload = e => resolve(<Buffer>e.target?.result);
-        });
+    private static async getSheetBySheetjs(excel: string | File, sheetName: string | number): Promise<WorkSheet> {
+        let workbook = typeof excel === "string" ? XLSX.readFile(excel) : XLSX.read(await this.getBuffer(excel));
+        sheetName = typeof sheetName === "number" ? workbook.SheetNames[sheetName] : sheetName;
+        return workbook.Sheets[sheetName];
+    }
+
+    private static async getSheetJson(excel: string | File, sheetName: string | number): Promise<Array<Array<any>>> {
+        let name = typeof excel === "string" ? excel : excel.name;
+        let sheet = name.endsWith(".xls") ? await this.getSheetBySheetjs(excel, sheetName) :
+            await this.getSheetByExceljs(excel, sheetName);
+        this.lstRange = (!name.endsWith(".xls") ? this.getMerges(<Worksheet>sheet) : (<WorkSheet>sheet)["!merges"]) || [];
+        return !name.endsWith(".xls") ? <Array<Array<any>>>sheet.getSheetValues() :
+            <Array<Array<any>>>XLSX.utils.sheet_to_json(sheet, {header: 1});
     }
 
     //获取excel表数据
     public static async toMap(excel: string | File, sheetName: string | number, headerRow?: number, headerCol?: number, headerLastCol?: number, dataRow?: number, dataLastRow?: number, extraData?: Map<string, string>): Promise<Array<Map<string, string | number>>> {
-        let sheet = await this.getSheet(excel, sheetName);
+        let sheet = await this.getSheetBySheetjs(excel, sheetName);
         //表数据转数组数据
-        let sheetJson = <Array<Array<any>>>sheet.getSheetValues();
+        let sheetJson = <Array<Array<any>>>XLSX.utils.sheet_to_json(sheet, {header: 1});
 
         //数据初始化
-        headerRow = headerRow || 1;
-        headerCol = headerCol || 1;
+        headerRow = headerRow || 0;
+        headerCol = headerCol || 0;
         dataRow = dataRow || headerRow + 1;
-        this.lstRange = this.getMerges(sheet);
+        this.lstRange = sheet["!merges"] || [];
         dataLastRow = dataLastRow || sheetJson.length;
         extraData = extraData || new Map<string, string>();
         headerLastCol = headerLastCol || sheetJson[headerRow].length;
