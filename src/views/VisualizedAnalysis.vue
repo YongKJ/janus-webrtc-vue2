@@ -9,11 +9,11 @@
             drag
             ref="upload"
             :auto-upload="false"
-            :action="visualizedAnalysis.url"
-            :file-list="visualizedAnalysis.files"
-            :on-remove="visualizedAnalysis.removeFile"
-            :on-change="visualizedAnalysis.changeFiles"
-            :http-request="visualizedAnalysis.uploadFiles"
+            :action="visualizedAnalysisService.url"
+            :file-list="visualizedAnalysisService.files"
+            :on-remove="visualizedAnalysisService.removeFile"
+            :on-change="visualizedAnalysisService.changeFiles"
+            :http-request="visualizedAnalysisService.uploadFiles"
         >
           <i class="el-icon-upload avatar-uploader-icon-computer"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击选择</em></div>
@@ -22,13 +22,13 @@
       </el-form-item>
 
       <el-form-item style="width: 100%">
-        <el-button type="primary" class="button-border-orange" @click="visualizedAnalysis.exportExcelData()">导出 EXCEL
+        <el-button type="primary" class="button-border-orange" @click="visualizedAnalysisService.exportExcelOperate()">导出 EXCEL
           数据
         </el-button>
       </el-form-item>
 
       <el-form-item style="width: 100%">
-        <el-button type="primary" class="button-border" @click="visualizedAnalysis.showDefaultData()">展示默认数据</el-button>
+        <el-button type="primary" class="button-border" @click="visualizedAnalysisService.showDefaultData()">展示默认数据</el-button>
       </el-form-item>
 
       <el-form-item style="user-select: none;">
@@ -38,56 +38,56 @@
                 class="layout-button"
                 icon="el-icon-minus"
                 style="float: left"
-                @click="visualizedAnalysis.visualDecrease()"></el-button>
+                @click="visualizedAnalysisService.visualDecrease()"></el-button>
           </el-col>
           <el-col :span="18">
             <el-progress
                 text-color="white"
                 :stroke-width="30"
                 :text-inside="true"
-                :percentage="visualizedAnalysis.percentage"
-                :color="visualizedAnalysis.colors"/>
+                :percentage="visualizedAnalysisService.percentage"
+                :color="visualizedAnalysisService.colors"/>
           </el-col>
           <el-col :span="3">
             <el-button
                 class="layout-button"
                 icon="el-icon-plus"
                 style="float: right"
-                @click="visualizedAnalysis.visualIncrease()"></el-button>
+                @click="visualizedAnalysisService.visualIncrease()"></el-button>
           </el-col>
         </el-row>
       </el-form-item>
 
       <el-form-item style="user-select: none;">
-        <el-input type="text" v-model="visualizedAnalysis.layoutTitle" placeholder="请输入可视化图表标题"></el-input>
+        <el-input type="text" v-model="visualizedAnalysisService.layoutTitle" placeholder="请输入可视化图表标题"></el-input>
       </el-form-item>
 
       <el-form-item style="user-select: none;">
-        <el-input type="text" v-model="visualizedAnalysis.xAxisTitle" placeholder="请输入 X 轴标题"></el-input>
+        <el-input type="text" v-model="visualizedAnalysisService.xAxisTitle" placeholder="请输入 X 轴标题"></el-input>
       </el-form-item>
 
       <el-form-item style="user-select: none;">
         <el-select
-            v-model="visualizedAnalysis.xAxis"
+            v-model="visualizedAnalysisService.xAxis"
             placeholder="请选择 X 轴方向数据"
             style="width: 100%">
           <el-option
               :key="index"
               :label="field"
               :value="field"
-              v-for="(field, index) in visualizedAnalysis.fields"
+              v-for="(field, index) in visualizedAnalysisService.fields"
           >
           </el-option>
         </el-select>
       </el-form-item>
 
       <el-form-item style="user-select: none;">
-        <el-input type="text" v-model="visualizedAnalysis.yAxisTitle" placeholder="请输入 Y 轴标题"></el-input>
+        <el-input type="text" v-model="visualizedAnalysisService.yAxisTitle" placeholder="请输入 Y 轴标题"></el-input>
       </el-form-item>
 
       <el-form-item style="user-select: none;">
         <el-select
-            v-model="visualizedAnalysis.yAxis"
+            v-model="visualizedAnalysisService.yAxis"
             placeholder="请选择 Y 轴方向数据"
             style="width: 100%"
             multiple>
@@ -95,26 +95,29 @@
               :key="index"
               :label="field"
               :value="field"
-              v-for="(field, index) in visualizedAnalysis.fields">
+              v-for="(field, index) in visualizedAnalysisService.fields">
           </el-option>
         </el-select>
       </el-form-item>
 
       <el-form-item style="width: 100%">
         <el-button type="primary" class="button-border-blue"
-                   @click="visualizedAnalysis.visualizedAnalysis()">数据可视化
+                   @click="visualizedAnalysisService.visualizedAnalysis()">数据可视化
         </el-button>
       </el-form-item>
 
       <el-form-item style="width: 100%">
-        <el-button type="primary" class="button-border-red" @click="visualizedAnalysis.resetVisualizedAnalysis()">重置可视化操作</el-button>
+        <el-button type="primary" class="button-border-red" @click="visualizedAnalysisService.resetVisualizedAnalysis()">重置可视化操作</el-button>
       </el-form-item>
     </el-form>
+
+    <freeze-excel/>
   </wallpaper-plus>
 </template>
 
 <script lang="ts">
 import Vue, {getCurrentInstance, ref} from "vue";
+import FreezeExcel from "@/components/FreezeExcel.vue";
 import WallpaperPlus from "@/components/WallpaperPlus.vue";
 import {VisualizedAnalysisService} from "@/common/service/VisualizedAnalysisService";
 
@@ -122,11 +125,12 @@ export default Vue.extend({
   name: "VisualizedAnalysis",
   setup() {
     return {
-      visualizedAnalysis: ref(new VisualizedAnalysisService(getCurrentInstance()))
+      visualizedAnalysisService: ref(new VisualizedAnalysisService(getCurrentInstance()))
     }
   },
   components: {
-    WallpaperPlus
+    WallpaperPlus,
+    FreezeExcel
   }
 });
 </script>

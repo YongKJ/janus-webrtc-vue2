@@ -1,4 +1,4 @@
-import {AddWorksheetOptions, Cell, CellValue, Column, Style, Workbook, Worksheet} from "exceljs";
+import {AddWorksheetOptions, Cell, CellValue, Column, Style, Workbook, Worksheet, WorksheetViewFrozen} from "exceljs";
 import {ReadableWebToNodeStream} from "readable-web-to-node-stream";
 import {FileUtil} from "@/common/util/FileUtil";
 import {Coords} from "../pojo/po/Coords";
@@ -466,9 +466,15 @@ export class ExcelUtil {
     }
 
     //数据写入到表中
-    public static packSheet(name?: string): void {
+    public static packSheet(name?: string, dataRow?: string, dataCol?: string): void {
         if (this.workbook == null) {
             this.workbook = new Workbook();
+        }
+        if (typeof dataRow !== "undefined" && typeof dataCol !== "undefined") {
+            dataRow = dataRow.length === 0 ? "0" : dataRow;
+            dataCol = dataCol.length === 0 ? "0" : dataCol;
+            (<WorksheetViewFrozen>this.freezeInfo.views[0]).ySplit = GenUtil.strToNumber(dataRow);
+            (<WorksheetViewFrozen>this.freezeInfo.views[0]).xSplit = GenUtil.strToNumber(dataCol);
         }
         let sheet = this.workbook.addWorksheet(name, this.freezeInfo);
         //设置列宽

@@ -8,6 +8,7 @@ import autobind from "autobind-decorator";
 import Plotly from "plotly.js-dist-min";
 import {PlotData, Layout, Config, PlotlyHTMLElement} from "plotly.js-dist-min";
 import {ExcelUtil} from "@/common/util/ExcelUtil";
+import {FreezeExcelService} from "@/common/service/FreezeExcelService";
 
 export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisService> {
 
@@ -187,24 +188,32 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
         this._xAxis = "";
     }
 
-    public async exportExcelData(): Promise<void> {
+    public async exportExcelOperate(): Promise<void> {
         if (this.tempExcelData.length === 0) {
             this.warning("请先选择本地数据文件！");
             return;
         }
+        if (!this.hasService(FreezeExcelService)) return;
+        this.getService(FreezeExcelService).freezeExcelVisible = true;
+    }
+
+    public async exportExcelData(): Promise<void> {
         let lstKey = GenUtil.getKeys(this.tempExcelData[0]);
         let lstHeader = new Array<Array<string>>();
         for (let key of lstKey) {
             lstHeader.push(Array.of(key));
         }
         let rowIndex = lstHeader[0].length;
-        ExcelUtil.writeHeader(lstHeader, undefined, 1);
+        ExcelUtil.writeHeader(lstHeader);
         for (let i = 0; i < this.tempExcelData.length; i++, rowIndex++) {
             for (let j = 0, colIndex = 0; j < lstKey.length; j++, colIndex++) {
                 ExcelUtil.writeCellData(rowIndex, colIndex, this.tempExcelData[i].get(lstKey[j]));
             }
         }
-        ExcelUtil.packSheet();
+        !this.hasService(FreezeExcelService) ? ExcelUtil.packSheet() : ExcelUtil.packSheet(
+            undefined, this.getService(FreezeExcelService).dataRow,
+            this.getService(FreezeExcelService).dataCol
+        );
         let buffer = await ExcelUtil.writeBuffer();
         let url = URL.createObjectURL(new Blob([buffer]));
         let index = this.file?.name.lastIndexOf(".");

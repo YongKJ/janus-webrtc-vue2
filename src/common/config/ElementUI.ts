@@ -5,12 +5,13 @@ import {
     Form,
     Input,
     Button,
+    Dialog,
     Upload,
     Option,
     Select,
     Progress,
     FormItem,
-    ButtonGroup
+    ButtonGroup,
 } from "element-ui";
 
 export const ElementUI = {
@@ -26,6 +27,7 @@ export const ElementUI = {
         Vue.component(Button.name, Button);
         Vue.component(Select.name, Select);
         Vue.component(Option.name, Option);
+        Vue.component(Dialog.name, Dialog);
         Vue.component(Progress.name, Progress);
         Vue.component(ButtonGroup.name, ButtonGroup);
     }
