@@ -37,7 +37,7 @@
           style="margin-left: 10px;"
           @click="freezeExcelService.freezeExcelChange()"
       >
-        确 定
+        导 出
       </el-button>
     </span>
   </el-dialog>
