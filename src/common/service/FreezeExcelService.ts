@@ -58,6 +58,8 @@ export class FreezeExcelService extends CommonService<FreezeExcelService> {
     }
 
     set freezeExcelVisible(value: boolean) {
+        this._dataRow = "";
+        this._dataCol = "";
         this._freezeExcelVisible = value;
         this._names = new Array<string>();
         this._sheetNames = this.getService(VisualizedAnalysisService).sheetNames;
