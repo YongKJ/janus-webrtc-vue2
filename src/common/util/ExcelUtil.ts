@@ -8,6 +8,7 @@ import {WorkSheet} from "xlsx";
 
 export class ExcelUtil {
 
+    //写workbook
     private static workbook: Workbook | null = null;
     //行高
     private static height: number = 36;
@@ -77,9 +78,28 @@ export class ExcelUtil {
             <Array<Array<any>>>XLSX.utils.sheet_to_json(sheet, {header: 1});
     }
 
-    //获取excel表数据
+    public static async toMapSheet(excel: string | File, headerRow?: number, headerCol?: number, headerLastCol?: number, dataRow?: number, dataLastRow?: number, extraData?: Map<string, string>): Promise<Map<string, Array<Map<string, string | number>>>> {
+        let workbook = typeof excel === "string" ? XLSX.readFile(excel) : XLSX.read(await excel.arrayBuffer());
+        let mapSheet = new Map<string, Array<Map<string, string | number>>>();
+        for (let sheetName of workbook.SheetNames) {
+            let sheet = workbook.Sheets[sheetName];
+            let sheetData = await this.toMapBySheet(
+                sheet, headerRow,
+                headerCol, headerLastCol,
+                dataRow, dataLastRow, extraData
+            );
+            mapSheet.set(sheetName, sheetData);
+        }
+        return mapSheet;
+    }
+
     public static async toMap(excel: string | File, sheetName: string | number, headerRow?: number, headerCol?: number, headerLastCol?: number, dataRow?: number, dataLastRow?: number, extraData?: Map<string, string>): Promise<Array<Map<string, string | number>>> {
         let sheet = await this.getSheetBySheetjs(excel, sheetName);
+        return this.toMapBySheet(sheet, headerRow, headerCol, headerLastCol, dataRow, dataLastRow, extraData);
+    }
+
+    //获取excel表数据
+    private static async toMapBySheet(sheet: WorkSheet, headerRow?: number, headerCol?: number, headerLastCol?: number, dataRow?: number, dataLastRow?: number, extraData?: Map<string, string>): Promise<Array<Map<string, string | number>>> {
         //表数据转数组数据
         let sheetJson = <Array<Array<any>>>XLSX.utils.sheet_to_json(sheet, {header: 1});
 

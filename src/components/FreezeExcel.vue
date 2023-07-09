@@ -11,6 +11,20 @@
       冻结表格
     </span>
 
+    <el-select
+        v-if="freezeExcelService.sheetNames.length > 1"
+        style="width: 100%;margin-bottom: 20px"
+        v-model="freezeExcelService.names"
+        placeholder="请选择 sheet 表格数据"
+        multiple>
+      <el-option
+          :key="index"
+          :label="sheetName"
+          :value="sheetName"
+          v-for="(sheetName, index) in freezeExcelService.sheetNames">
+      </el-option>
+    </el-select>
+
     <el-input
         type="text"
         placeholder="请输入冻结行数"

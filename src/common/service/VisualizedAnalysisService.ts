@@ -13,6 +13,7 @@ import {FreezeExcelService} from "@/common/service/FreezeExcelService";
 export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisService> {
 
     private _xAxis: string;
+    private _sheetName: string;
     private _percentage: number;
     private _xAxisTitle: string;
     private _yAxisTitle: string;
@@ -22,12 +23,14 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
     private _fields: Array<string>;
     private file: StreamFile | null;
     private _files: Array<StreamFile>;
+    private _sheetNames: Array<string>;
     private coord: Record<string, any>;
     private plotly: PlotlyHTMLElement | null;
     private coords: Array<Record<string, any>>;
     private tempExcelData: Array<Map<string, any>>;
     private readonly excelData: Array<Map<string, any>>;
     private readonly _colors: Array<Record<string, any>>;
+    private mapSheets: Map<string, Array<Map<string, any>>>;
 
     public constructor(vue: { proxy: Vue } | null) {
         super(vue);
@@ -35,15 +38,18 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
         this._xAxis = "";
         this.file = null;
         this.plotly = null;
+        this._sheetName = "";
         this._percentage = 25;
         this._xAxisTitle = "";
         this._yAxisTitle = "";
         this._layoutTitle = "";
         this._yAxis = new Array<string>();
         this._fields = new Array<string>();
+        this._sheetNames = new Array<string>();
         this._files = new Array<StreamFile>();
         this.excelData = VisualizedAnalysis.EXCEL_DATA;
         this.tempExcelData = new Array<Map<string, any>>();
+        this.mapSheets = new Map<string, Array<Map<string, any>>>();
         this._colors = Array.of(
             {color: '#5cb87a', percentage: 26},
             {color: '#e6a23c', percentage: 51},
@@ -72,9 +78,14 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
         }
         this.file = file;
         this.resetVisualizedAnalysis();
-        this.tempExcelData = await ExcelUtil.toMap(file.raw, 0);
-        if (this.tempExcelData.length > 0) {
-            this._fields = GenUtil.getKeys(this.tempExcelData[0]);
+        this.mapSheets = await ExcelUtil.toMapSheet(file.raw);
+        this._sheetNames = GenUtil.getKeys(this.mapSheets);
+        if (this._sheetNames.length === 1) {
+            this._sheetName = this._sheetNames[0];
+            this.tempExcelData = <Array<Map<string, any>>>this.mapSheets.get(this._sheetName);
+            if (this.tempExcelData.length > 0) {
+                this._fields = GenUtil.getKeys(this.tempExcelData[0]);
+            }
         }
     }
 
@@ -167,6 +178,8 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
 
     @autobind
     public removeFile(file: StreamFile, fileList: Array<StreamFile>): void {
+        this.mapSheets = new Map<string, Array<Map<string, any>>>();
+        this._sheetNames = new Array<string>();
         this.resetVisualizedAnalysis();
     }
 
@@ -184,36 +197,52 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
         this._layoutTitle = "";
         this._xAxisTitle = "";
         this._yAxisTitle = "";
+        this._sheetName = "";
+        this.plotly = null;
+        this._xAxis = "";
+    }
+
+    public switchSheetData(): void {
+        if (this.plotly != null) Plotly.purge("target");
+        this._yAxis = new Array<string>();
+        this.coord = this.coords[0];
+        this._percentage = 25;
+        this._layoutTitle = "";
+        this._xAxisTitle = "";
+        this._yAxisTitle = "";
         this.plotly = null;
         this._xAxis = "";
     }
 
     public async exportExcelOperate(): Promise<void> {
-        if (this.tempExcelData.length === 0) {
+        if (this.mapSheets.size === 0) {
             this.warning("请先选择本地数据文件！");
             return;
         }
-        if (!this.hasService(FreezeExcelService)) return;
         this.getService(FreezeExcelService).freezeExcelVisible = true;
     }
 
     public async exportExcelData(): Promise<void> {
-        let lstKey = GenUtil.getKeys(this.tempExcelData[0]);
-        let lstHeader = new Array<Array<string>>();
-        for (let key of lstKey) {
-            lstHeader.push(Array.of(key));
-        }
-        let rowIndex = lstHeader[0].length;
-        ExcelUtil.writeHeader(lstHeader);
-        for (let i = 0; i < this.tempExcelData.length; i++, rowIndex++) {
-            for (let j = 0, colIndex = 0; j < lstKey.length; j++, colIndex++) {
-                ExcelUtil.writeCellData(rowIndex, colIndex, this.tempExcelData[i].get(lstKey[j]));
+        let sheetNames = this.getService(FreezeExcelService).names;
+        for (let sheetName of sheetNames) {
+            this.tempExcelData = <Array<Map<string, any>>>this.mapSheets.get(sheetName);
+            let lstKey = GenUtil.getKeys(this.tempExcelData[0]);
+            let lstHeader = new Array<Array<string>>();
+            for (let key of lstKey) {
+                lstHeader.push(Array.of(key));
             }
+            let rowIndex = lstHeader[0].length;
+            ExcelUtil.writeHeader(lstHeader);
+            for (let i = 0; i < this.tempExcelData.length; i++, rowIndex++) {
+                for (let j = 0, colIndex = 0; j < lstKey.length; j++, colIndex++) {
+                    ExcelUtil.writeCellData(rowIndex, colIndex, this.tempExcelData[i].get(lstKey[j]));
+                }
+            }
+            ExcelUtil.packSheet(sheetName,
+                this.getService(FreezeExcelService).dataRow,
+                this.getService(FreezeExcelService).dataCol
+            );
         }
-        !this.hasService(FreezeExcelService) ? ExcelUtil.packSheet() : ExcelUtil.packSheet(
-            undefined, this.getService(FreezeExcelService).dataRow,
-            this.getService(FreezeExcelService).dataCol
-        );
         let buffer = await ExcelUtil.writeBuffer();
         let url = URL.createObjectURL(new Blob([buffer]));
         let index = this.file?.name.lastIndexOf(".");
@@ -263,6 +292,23 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
         let num = this._percentage / 25;
         this.coord = this.coords[num - 1];
         this.reLayout();
+    }
+
+    get sheetName(): string {
+        return this._sheetName;
+    }
+
+    set sheetName(value: string) {
+        this._sheetName = value;
+        this.switchSheetData();
+        this.tempExcelData = <Array<Map<string, any>>>this.mapSheets.get(this._sheetName);
+        if (this.tempExcelData.length > 0) {
+            this._fields = GenUtil.getKeys(this.tempExcelData[0]);
+        }
+    }
+
+    get sheetNames(): Array<string> {
+        return this._sheetNames;
     }
 
     get colors(): Array<Record<string, any>> {

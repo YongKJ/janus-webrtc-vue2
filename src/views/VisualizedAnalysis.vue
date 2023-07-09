@@ -58,6 +58,20 @@
         </el-row>
       </el-form-item>
 
+      <el-form-item v-if="visualizedAnalysisService.sheetNames.length > 1" style="user-select: none;">
+        <el-select
+            v-model="visualizedAnalysisService.sheetName"
+            placeholder="请选择 sheet 表格数据"
+            style="width: 100%">
+          <el-option
+              :key="index"
+              :label="sheetName"
+              :value="sheetName"
+              v-for="(sheetName, index) in visualizedAnalysisService.sheetNames">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item style="user-select: none;">
         <el-input type="text" v-model="visualizedAnalysisService.layoutTitle" placeholder="请输入可视化图表标题"></el-input>
       </el-form-item>
