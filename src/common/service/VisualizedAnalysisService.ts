@@ -180,7 +180,9 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
     @autobind
     public removeFile(file: StreamFile, fileList: Array<StreamFile>): void {
         this.mapSheets = new Map<string, Array<Map<string, any>>>();
+        this.tempExcelData = new Array<Map<string, any>>();
         this._sheetNames = new Array<string>();
+        this._fields = new Array<string>();
         this.resetVisualizedAnalysis();
     }
 
@@ -190,8 +192,6 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
 
     public resetVisualizedAnalysis(): void {
         if (this.plotly != null) Plotly.purge("target");
-        this.tempExcelData = new Array<Map<string, any>>();
-        this._fields = new Array<string>();
         this._yAxis = new Array<string>();
         this.coord = this.coords[0];
         this._percentage = 25;
