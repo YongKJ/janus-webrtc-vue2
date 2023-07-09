@@ -168,6 +168,10 @@ export class GenUtil {
         return recData;
     }
 
+    public static strToRecord(str: string): Record<string, any> | Array<Record<string, any>> {
+        return JSON.parse(str);
+    }
+
     public static getKeys(data: Map<string, any> | Record<string, any>): Array<string> {
         if (GenUtil.isJson(data)) {
             return Object.keys(data);

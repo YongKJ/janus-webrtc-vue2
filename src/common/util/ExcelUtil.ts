@@ -79,6 +79,12 @@ export class ExcelUtil {
     }
 
     public static async toMapSheet(excel: string | File, headerRow?: number, headerCol?: number, headerLastCol?: number, dataRow?: number, dataLastRow?: number, extraData?: Map<string, string>): Promise<Map<string, Array<Map<string, string | number>>>> {
+        if (typeof excel !== "string" && excel.name.endsWith(".json")) {
+            let recData = <Array<Record<string, any>>>GenUtil.strToRecord(await excel.text());
+            return new Map<string, Array<Map<string, string | number>>>([
+                ["Sheet0", GenUtil.arrayToMapList(recData)]
+            ]);
+        }
         let workbook = typeof excel === "string" ? XLSX.readFile(excel) : XLSX.read(await excel.arrayBuffer());
         let mapSheet = new Map<string, Array<Map<string, string | number>>>();
         for (let sheetName of workbook.SheetNames) {

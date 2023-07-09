@@ -67,8 +67,9 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
 
     @autobind
     public async changeFiles(file: StreamFile, fileList: Array<StreamFile>): Promise<void> {
-        if (!(file.name.endsWith(".xlsx") || file.name.endsWith(".xls") || file.name.endsWith(".csv"))) {
-            this.warning("数据文件格式仅支持 XLSX、XLS、CSV！");
+        if (!(file.name.endsWith(".xlsx") || file.name.endsWith(".xls") ||
+            file.name.endsWith(".csv") || file.name.endsWith(".json"))) {
+            this.warning("数据文件格式仅支持 XLSX、XLS、CSV、JSON！");
             fileList.pop();
             return;
         }
