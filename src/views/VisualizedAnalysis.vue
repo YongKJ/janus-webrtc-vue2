@@ -1,5 +1,5 @@
 <template>
-  <wallpaper-plus color="208,233,242">
+  <wallpaper-plus color="208,233,242" :bg-img="visualizedAnalysisService.bgImg">
     <div id="target"></div>
 
     <el-form class="login-container" label-position="left" label-width="0px">
@@ -19,6 +19,10 @@
           <div class="el-upload__text">将文件拖到此处，或<em>点击选择</em></div>
           <div class="upload-tips">数据文件格式支持 XLSX、XLS、CSV、JSON</div>
         </el-upload>
+      </el-form-item>
+
+      <el-form-item style="width: 100%">
+        <el-button type="primary" class="button-border-purple" @click="visualizedAnalysisService.changeBgImgIndex()">更换背景图片</el-button>
       </el-form-item>
 
       <el-form-item style="width: 100%">
@@ -134,11 +138,13 @@ import Vue, {getCurrentInstance, ref} from "vue";
 import FreezeExcel from "@/components/FreezeExcel.vue";
 import WallpaperPlus from "@/components/WallpaperPlus.vue";
 import {VisualizedAnalysisService} from "@/common/service/VisualizedAnalysisService";
+import {WallpaperPlusImage} from "@/common/pojo/po/WallpaperPlusImage";
 
 export default Vue.extend({
   name: "VisualizedAnalysis",
   setup() {
     return {
+      WallpaperPlusImage,
       visualizedAnalysisService: ref(new VisualizedAnalysisService(getCurrentInstance()))
     }
   },
@@ -249,5 +255,18 @@ export default Vue.extend({
   background: rgba(45, 45, 45, 0.33);
   border: 1px solid rgb(255,105,0);
   box-shadow: 0 0 25px rgba(251,105,98, .5);
+}
+
+.button-border-purple {
+  width: 100%;
+  background: rgba(45, 45, 45, 0.33);
+  border: 1px solid rgb(151,120,209);
+}
+
+.button-border-purple:hover {
+  width: 100%;
+  background: rgba(45, 45, 45, 0.33);
+  border: 1px solid rgb(151,120,209);
+  box-shadow: 0 0 25px rgba(155,81,224, .5);
 }
 </style>

@@ -9,10 +9,13 @@ import Plotly from "plotly.js-dist-min";
 import {PlotData, Layout, Config, PlotlyHTMLElement} from "plotly.js-dist-min";
 import {ExcelUtil} from "@/common/util/ExcelUtil";
 import {FreezeExcelService} from "@/common/service/FreezeExcelService";
+import {WallpaperPlusImage} from "@/common/pojo/po/WallpaperPlusImage";
 
 export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisService> {
 
+    private _bgImg: any;
     private _xAxis: string;
+    private bgImgIndex: number;
     private _sheetName: string;
     private _percentage: number;
     private _xAxisTitle: string;
@@ -38,6 +41,7 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
         this._xAxis = "";
         this.file = null;
         this.plotly = null;
+        this.bgImgIndex = 0;
         this._sheetName = "";
         this._percentage = 25;
         this._xAxisTitle = "";
@@ -45,8 +49,9 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
         this._layoutTitle = "";
         this._yAxis = new Array<string>();
         this._fields = new Array<string>();
-        this._sheetNames = new Array<string>();
         this._files = new Array<StreamFile>();
+        this._sheetNames = new Array<string>();
+        this._bgImg = WallpaperPlusImage.BACKGROUND;
         this.excelData = VisualizedAnalysis.EXCEL_DATA;
         this.tempExcelData = new Array<Map<string, any>>();
         this.mapSheets = new Map<string, Array<Map<string, any>>>();
@@ -63,6 +68,27 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
             {width: 1920, height: 947},
         );
         this.coord = this.coords[0];
+    }
+
+    public changeBgImgIndex(): void {
+        this.bgImgIndex += 1;
+        if (this.bgImgIndex > 3) {
+            this.bgImgIndex = 0;
+        }
+        this._bgImg = this.getBgImg();
+    }
+
+    private getBgImg(): any {
+        switch (this.bgImgIndex) {
+            case 0:
+                return WallpaperPlusImage.BACKGROUND;
+            case 1:
+                return WallpaperPlusImage.BACKGROUND_TWO;
+            case 2:
+                return WallpaperPlusImage.BACKGROUND_THREE;
+            case 3:
+                return WallpaperPlusImage.BACKGROUND_FOUR;
+        }
     }
 
     @autobind
@@ -293,6 +319,14 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
         let num = this._percentage / 25;
         this.coord = this.coords[num - 1];
         this.reLayout();
+    }
+
+    get bgImg(): any {
+        return this._bgImg;
+    }
+
+    set bgImg(value: any) {
+        this._bgImg = value;
     }
 
     get sheetName(): string {
