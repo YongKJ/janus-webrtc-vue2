@@ -7,9 +7,10 @@ import {GenUtil} from "@/common/util/GenUtil";
 export class PeerService {
 
     private readonly WEBRTC_PEER = "peer";
-    private readonly infoUtil = new InfoUtil(Global.WEBRTC_PEER_BASE_URL, "/webrtc");
+    private infoUtil: InfoUtil | null = null;
 
     private peerSubscribe(resFunc: ((msg: WebRTCMessage) => void)): void {
+        if (this.infoUtil == null) this.infoUtil = new InfoUtil(Global.WEBRTC_PEER_BASE_URL, "/webrtc");
        this.infoUtil.sendInfo(this.WEBRTC_PEER, undefined, (data: Record<string, any>) => {
            resFunc(<WebRTCMessage>DataUtil.convertData(data, WebRTCMessage));
        });
@@ -37,6 +38,7 @@ export class PeerService {
     }
 
     private sendInfo(msg: WebRTCMessage): void {
+        if (this.infoUtil == null) this.infoUtil = new InfoUtil(Global.WEBRTC_PEER_BASE_URL, "/webrtc");
         let reqData = GenUtil.objToRecord(msg);
         this.infoUtil.sendInfo(this.WEBRTC_PEER, reqData);
     }
