@@ -26,11 +26,12 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
     private _fields: Array<string>;
     private file: StreamFile | null;
     private _files: Array<StreamFile>;
-    private _sheetNames: Array<string>;
     private coord: Record<string, any>;
+    private _sheetNames: Array<string>;
+    private readonly bgImgs: Array<any>;
     private plotly: PlotlyHTMLElement | null;
-    private coords: Array<Record<string, any>>;
     private tempExcelData: Array<Map<string, any>>;
+    private readonly coords: Array<Record<string, any>>;
     private readonly excelData: Array<Map<string, any>>;
     private readonly _colors: Array<Record<string, any>>;
     private mapSheets: Map<string, Array<Map<string, any>>>;
@@ -68,27 +69,31 @@ export class VisualizedAnalysisService extends CommonService<VisualizedAnalysisS
             {width: 1920, height: 947},
         );
         this.coord = this.coords[0];
+        this.bgImgs = Array.of(
+            WallpaperPlusImage.BACKGROUND,
+            WallpaperPlusImage.BACKGROUND_TWO,
+            WallpaperPlusImage.BACKGROUND_THREE,
+            WallpaperPlusImage.BACKGROUND_FOUR,
+            WallpaperPlusImage.BACKGROUND_FIVE,
+            WallpaperPlusImage.BACKGROUND_SIX,
+            WallpaperPlusImage.BACKGROUND_SEVEN,
+            WallpaperPlusImage.BACKGROUND_EIGHT,
+            WallpaperPlusImage.BACKGROUND_NINE,
+            WallpaperPlusImage.BACKGROUND_TEN,
+            WallpaperPlusImage.BACKGROUND_ELEVEN,
+            WallpaperPlusImage.BACKGROUND_TWELVE,
+            WallpaperPlusImage.BACKGROUND_THIRTEEN,
+            WallpaperPlusImage.BACKGROUND_FOURTEEN,
+            WallpaperPlusImage.BACKGROUND_FIFTEEN,
+        );
     }
 
     public changeBgImgIndex(): void {
         this.bgImgIndex += 1;
-        if (this.bgImgIndex > 3) {
+        if (this.bgImgIndex > 14) {
             this.bgImgIndex = 0;
         }
-        this._bgImg = this.getBgImg();
-    }
-
-    private getBgImg(): any {
-        switch (this.bgImgIndex) {
-            case 0:
-                return WallpaperPlusImage.BACKGROUND;
-            case 1:
-                return WallpaperPlusImage.BACKGROUND_TWO;
-            case 2:
-                return WallpaperPlusImage.BACKGROUND_THREE;
-            case 3:
-                return WallpaperPlusImage.BACKGROUND_FOUR;
-        }
+        this._bgImg = this.bgImgs[this.bgImgIndex];
     }
 
     @autobind
