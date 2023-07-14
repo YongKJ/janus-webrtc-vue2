@@ -55,6 +55,17 @@
         <el-button type="primary" class="button-border-red" @click="demoTestService.reset()">忘记密码？</el-button>
       </el-form-item>
     </el-form>
+
+    <aplayer
+        fixed
+        :lrcType="0"
+        ref="aplayer"
+        :mini="false"
+        :autoplay="true"
+        :listFolded="true"
+        :audio="demoTestService.audios"
+        v-if="demoTestService.musicFlag"
+    />
   </wallpaper-plus>
 </template>
 

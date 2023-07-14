@@ -13,7 +13,9 @@ export class DemoTestService extends CommonService<DemoTestService> {
     private _url: string;
     private _userName: string;
     private _password: string;
+    private _musicFlag: boolean;
     private _files: Array<StreamFile>;
+    private _audios: Array<Record<string, any>>;
     private excelFile: Array<Map<string, any>>;
 
     public constructor(vue: { proxy: Vue } | null) {
@@ -21,8 +23,23 @@ export class DemoTestService extends CommonService<DemoTestService> {
         this._url = "";
         this._userName = "";
         this._password = "";
+        this._musicFlag = true;
         this.excelFile = DemoTest.EXCEL_FILE;
         this._files = new Array<StreamFile>();
+        this._audios = Array.of({
+            lrc: "",
+            artist: "本兮",
+            name: "让寂寞别走",
+            cover: "https://m.yongkj.cn/audio_default.png",
+            url: "https://file.yongkj.cn/fileSystem/admin/Music/%E6%9C%AC%E5%85%AE%20-%20%E8%AE%A9%E5%AF%82%E5%AF%9E%E5%88%AB%E8%B5%B0%20%20mqms2%20.mp3",
+        }, {
+
+            lrc: "",
+            artist: "本兮&单小源",
+            name: "你在看孤独的风景",
+            cover: "https://m.yongkj.cn/audio_default.png",
+            url: "https://file.yongkj.cn/fileSystem/admin/Music/%E6%9C%AC%E5%85%AE%26%E5%8D%95%E5%B0%8F%E6%BA%90%20-%20%E4%BD%A0%E5%9C%A8%E7%9C%8B%E5%AD%A4%E7%8B%AC%E7%9A%84%E9%A3%8E%E6%99%AF%20%20mqms2%20.mp3",
+        });
     }
 
     public initData(): void {
@@ -77,6 +94,14 @@ export class DemoTestService extends CommonService<DemoTestService> {
         // this.service.userName = "Hello world!";
         // this.service.password = "Hello world!";
         this.getService(WallpaperPlusService).emit("test", "Hello world！");
+    }
+
+    get audios(): Array<Record<string, any>> {
+        return this._audios;
+    }
+
+    get musicFlag(): boolean {
+        return this._musicFlag;
     }
 
     get userName(): string {

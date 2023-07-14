@@ -3,6 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import APlayer from '@moefe/vue-aplayer';
+Vue.use(APlayer, {
+    defaultCover: 'https://github.com/u3u.png',
+    productionTip: false,
+});
+
 // @ts-ignore
 import HappyScroll from "vue-happy-scroll";
 import "vue-happy-scroll/docs/happy-scroll.css";
