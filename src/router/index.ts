@@ -16,7 +16,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: "DemoTest"
     },
-    component: () => import(/* webpackChunkName: "about" */ '@/views/DemoTest.vue')
+    component: () => import('@/views/DemoTest.vue')
   },
   {
     path: '/webrtc',
@@ -24,7 +24,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Webrtc Peer Test'
     },
-    component: () => import(/* webpackChunkName: "about" */ '@/views/WebrtcPeerTest.vue')
+    component: () => import('@/views/WebrtcPeerTest.vue')
   },
   {
     path: '/audio',
@@ -32,7 +32,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Janus Audio Test'
     },
-    component: () => import(/* webpackChunkName: "about" */ '@/views/JanusAudioTest.vue')
+    component: () => import('@/views/JanusAudioTest.vue')
   },
   {
     path: '/janus',
@@ -40,7 +40,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Janus Webrtc Test'
     },
-    component: () => import(/* webpackChunkName: "about" */ '@/views/JanusWebrtcTest.vue')
+    component: () => import('@/views/JanusWebrtcTest.vue')
   },
   {
     path: '/stream',
@@ -48,7 +48,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Janus Stream Test'
     },
-    component: () => import(/* webpackChunkName: "about" */ '@/views/JanusStreamTest.vue')
+    component: () => import('@/views/JanusStreamTest.vue')
   },
   {
     path: '/visual',
@@ -56,7 +56,7 @@ const routes: Array<RouteConfig> = [
     meta: {
       title: 'Visualized Analysis Test'
     },
-    component: () => import(/* webpackChunkName: "about" */ '@/views/VisualizedAnalysis.vue')
+    component: () => import('@/views/VisualizedAnalysis.vue')
   },
 ]
 
