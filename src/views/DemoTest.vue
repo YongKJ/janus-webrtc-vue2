@@ -55,13 +55,13 @@
         <el-button type="primary" class="button-border-red" @click="demoTestService.reset()">忘记密码？</el-button>
       </el-form-item>
 
-      <el-form-item style="width: 100%">
+      <el-form-item style="width: 100%" v-if="show">
         <el-pagination
-            @current-change="demoTestService.pageNumberChange"
             @size-change="demoTestService.pageSizeChange"
-            :current-page.sync="demoTestService.pageNumber"
             :page-size="demoTestService.pageSize"
-            :total="totalRecord"
+            :total="demoTestService.totalRecord"
+            @current-change="pageNumberChange"
+            :current-page.sync="pageNumber"
             layout="prev, pager, next"
             :pager-count="5"
             ref="pagination"
@@ -143,8 +143,10 @@ export default Vue.extend({
       LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "this.pageNumber", this.pageNumber));
       LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "this.show", this.show));
       this.$nextTick(() => {
-        this.show = true;
-        LogUtil.loggerLine(Log.of("DemoTestService", "$nextTick", "this.show", this.show));
+        setTimeout(() => {
+          this.show = true;
+          LogUtil.loggerLine(Log.of("DemoTestService", "$nextTick", "this.show", this.show));
+        }, 2000);
       });
     }
   },
