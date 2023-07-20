@@ -54,6 +54,31 @@
       <el-form-item style="width: 100%">
         <el-button type="primary" class="button-border-red" @click="demoTestService.reset()">忘记密码？</el-button>
       </el-form-item>
+
+      <el-form-item style="width: 100%">
+        <el-pagination
+            @current-change="demoTestService.pageNumberChange"
+            @size-change="demoTestService.pageSizeChange"
+            :current-page.sync="demoTestService.pageNumber"
+            :page-size="demoTestService.pageSize"
+            :total="totalRecord"
+            layout="prev, pager, next"
+            :pager-count="5"
+            ref="pagination"
+        ></el-pagination>
+
+        <!--        <el-pagination-->
+<!--            @size-change="demoTestService.pageSizeChange"-->
+<!--            @current-change="demoTestService.pageNumberChange"-->
+<!--            :current-page="demoTestService.pageNumber"-->
+<!--            :page-sizes="[10, 15, 20, 25, 30]"-->
+<!--            :page-size="demoTestService.pageSize"-->
+<!--            class="pagination2"-->
+<!--            layout="total, sizes, prev, pager, next, jumper"-->
+<!--            :pager-count="11"-->
+<!--            :total=demoTestService.totalRecord"-->
+<!--        ></el-pagination>-->
+      </el-form-item>
     </el-form>
 
     <aplayer
@@ -70,17 +95,57 @@
 </template>
 
 <script lang="ts">
-import Vue, {getCurrentInstance, onMounted, ref} from "vue";
+import Vue, {getCurrentInstance, onMounted, ref, watch} from "vue";
 import WallpaperPlus from "@/components/WallpaperPlus.vue";
 import {DemoTestService} from "@/common/service/DemoTestService";
+import {LogUtil} from "@/common/util/LogUtil";
+import {Log} from "@/common/pojo/dto/Log";
 
 export default Vue.extend({
   name: "DemoTest",
   setup() {
     const demoTestService = ref(new DemoTestService(getCurrentInstance()));
     onMounted(() => demoTestService.value.initData());
+    // const pageNumber = ref(1);
+    // watch(pageNumber, (newVal, oldVal) => {
+    //   demoTestService.value.pageNumber = newVal;
+    //   LogUtil.loggerLine(Log.of("DemoTestService", "setup", "newVal", newVal));
+    //   LogUtil.loggerLine(Log.of("DemoTestService", "setup", "oldVal", oldVal));
+    // });
     return {
-      demoTestService
+      demoTestService,
+      // pageNumber
+    }
+  },
+  data() {
+    return {
+      show: true,
+      pageNumber: 1,
+      totalRecord: null
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      // @ts-ignore
+      this.totalRecord = 30;
+    }, 2000);
+  },
+  watch: {
+    show(newVal, oldVal) {
+        LogUtil.loggerLine(Log.of("DemoTestService", "pageNumber", "newVal", newVal));
+        LogUtil.loggerLine(Log.of("DemoTestService", "pageNumber", "oldVal", oldVal));
+    }
+  },
+  methods: {
+    pageNumberChange: function (pageNumber: number) {
+      this.show = false;
+      this.pageNumber = pageNumber;
+      LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "this.pageNumber", this.pageNumber));
+      LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "this.show", this.show));
+      this.$nextTick(() => {
+        this.show = true;
+        LogUtil.loggerLine(Log.of("DemoTestService", "$nextTick", "this.show", this.show));
+      });
     }
   },
   components: {

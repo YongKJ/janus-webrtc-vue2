@@ -7,23 +7,34 @@ import {WallpaperPlusService} from "@/common/service/WallpaperPlusService";
 import {DemoTest} from "@/common/pojo/po/DemoTest";
 import {StreamFile} from "@/common/pojo/dto/StreamFile";
 import {ExcelUtil} from "@/common/util/ExcelUtil";
+import autobind from "autobind-decorator";
 
 export class DemoTestService extends CommonService<DemoTestService> {
 
+    private _key: number;
     private _url: string;
+    private _show: boolean;
+    private _pageSize: number;
     private _userName: string;
     private _password: string;
     private _musicFlag: boolean;
+    private _pageNumber: number;
+    private _totalRecord: number;
     private _files: Array<StreamFile>;
     private _audios: Array<Record<string, any>>;
     private excelFile: Array<Map<string, any>>;
 
     public constructor(vue: { proxy: Vue } | null) {
         super(vue);
+        this._key = 1;
         this._url = "";
+        this._show = false;
         this._userName = "";
         this._password = "";
+        this._pageSize = 10;
+        this._pageNumber = 1;
         this._musicFlag = true;
+        this._totalRecord = 30;
         this.excelFile = DemoTest.EXCEL_FILE;
         this._files = new Array<StreamFile>();
         this._audios = Array.of({
@@ -89,11 +100,54 @@ export class DemoTestService extends CommonService<DemoTestService> {
     }
 
     public handleButtonClick(): void {
+        this._show = true;
         this._userName = "Hello world!";
         this._password = "Hello world!";
         // this.service.userName = "Hello world!";
         // this.service.password = "Hello world!";
         this.getService(WallpaperPlusService).emit("test", "Hello world！");
+    }
+
+    @autobind
+    public pageNumberChange(pageNumber: number): void {
+        this._pageNumber = pageNumber;
+        // this.getRef("pagination").pagination = pageNumber;
+        // this.getRef("pagination").lastEmittedPage = pageNumber;
+        this.getRef("pagination")._props.currentPage = pageNumber;
+        this.getRef("pagination").emitChange();
+        LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "pageNumber", pageNumber));
+        LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "pagination", this.getRef("pagination")));
+        LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "emitChange", this.getRef("pagination").emitChange));
+    }
+
+    public pageSizeChange(pageSize: number): void {
+        LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "pageSize", pageSize));
+    }
+
+    get pageSize(): number {
+        return this._pageSize;
+    }
+
+    get totalRecord(): number {
+        return this._totalRecord;
+    }
+
+    get show(): boolean {
+        return this._show;
+    }
+
+    get key(): number {
+        return this._key;
+    }
+
+    get pageNumber(): number {
+        LogUtil.loggerLine(Log.of("DemoTestService", "getPageNumber", "value", this._pageNumber));
+        return this._pageNumber;
+    }
+
+    set pageNumber(value: number) {
+        this._pageNumber = value;
+        LogUtil.loggerLine(Log.of("DemoTestService", "setPageNumber", "value", value));
     }
 
     get audios(): Array<Record<string, any>> {

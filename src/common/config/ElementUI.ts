@@ -11,6 +11,8 @@ import {
     Select,
     Progress,
     FormItem,
+    Pagination,
+    PageHeader,
     ButtonGroup,
 } from "element-ui";
 
@@ -29,6 +31,8 @@ export const ElementUI = {
         Vue.component(Option.name, Option);
         Vue.component(Dialog.name, Dialog);
         Vue.component(Progress.name, Progress);
+        Vue.component(Pagination.name, Pagination);
+        Vue.component(PageHeader.name, PageHeader);
         Vue.component(ButtonGroup.name, ButtonGroup);
     }
 }
