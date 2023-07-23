@@ -110,18 +110,11 @@ export class DemoTestService extends CommonService<DemoTestService> {
 
     @autobind
     public pageNumberChange(pageNumber: number): void {
-        this._pageNumber = pageNumber;
-        // this.getRef("pagination").pagination = pageNumber;
-        // this.getRef("pagination").lastEmittedPage = pageNumber;
-        this.getRef("pagination")._props.currentPage = pageNumber;
-        this.getRef("pagination").emitChange();
         LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "pageNumber", pageNumber));
-        LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "pagination", this.getRef("pagination")));
-        LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "emitChange", this.getRef("pagination").emitChange));
     }
 
     public pageSizeChange(pageSize: number): void {
-        LogUtil.loggerLine(Log.of("DemoTestService", "pageNumberChange", "pageSize", pageSize));
+        LogUtil.loggerLine(Log.of("DemoTestService", "pageSizeChange", "pageSize", pageSize));
     }
 
     get pageSize(): number {

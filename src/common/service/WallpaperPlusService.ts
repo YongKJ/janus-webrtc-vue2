@@ -31,7 +31,7 @@ export class WallpaperPlusService extends CommonService<WallpaperPlusService> {
     private async getVerticalStrip(): Promise<Record<string, any>> {
         let scroll = undefined;
         do {
-            scroll = this.getProp("scroll");
+            scroll = this.getRef("scroll");
             await GenUtil.sleep(10);
         } while (typeof scroll === "undefined");
         if (typeof scroll === "undefined") return {};
